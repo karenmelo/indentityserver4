@@ -30,9 +30,7 @@ namespace SkyCommerce.Site.Configure
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
             var carrinhoService = scope.ServiceProvider.GetRequiredService<ICarrinhoService>();
-
-            Log.Information("Carregando usuarios");
-            await FakeData.EnsureSeedIdentityData(userManager, configuration);
+                              
 
             Log.Information("Carregando produtos");
             var produtos = await FakeData.CarregarProdutos(context, env.WebRootPath);

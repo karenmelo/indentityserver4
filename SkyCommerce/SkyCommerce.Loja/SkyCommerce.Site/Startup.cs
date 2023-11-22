@@ -31,23 +31,7 @@ namespace SkyCommerce.Site
             services.AddHttpClient();
             // Dbcontext config
             services.ConfigureProviderForContext<SkyContext>(DetectDatabase);
-
-            // ASP.NET Identity Configuration
-            services
-                .AddIdentity<IdentityUser, IdentityRole>(o =>
-                {
-                    o.Password.RequireDigit = false;
-                    o.Password.RequireLowercase = false;
-                    o.Password.RequireNonAlphanumeric = false;
-                    o.Password.RequiredLength = 8;
-                    o.Password.RequireUppercase = false;
-                    o.SignIn.RequireConfirmedEmail = false;
-                    o.SignIn.RequireConfirmedAccount = false;
-
-                })
-                .AddEntityFrameworkStores<SkyContext>()
-                .AddDefaultTokenProviders()
-                .AddErrorDescriber<IdentityMensagensPortugues>();
+                      
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = new PathString("/conta/entrar");
