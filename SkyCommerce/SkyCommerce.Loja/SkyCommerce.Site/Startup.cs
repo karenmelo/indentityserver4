@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using SkyCommerce.Data.Configuration;
 using SkyCommerce.Data.Context;
 using SkyCommerce.Site.Configure;
+using System.Diagnostics;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace SkyCommerce.Site
 {
@@ -29,9 +33,44 @@ namespace SkyCommerce.Site
                 .AddRazorRuntimeCompilation();
 
             services.AddHttpClient();
+
+
+            //serve para o aspnetcore nao associar os schemas xml ao nome default das claims
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+            if (Debugger.IsAttached)
+            {
+                IdentityModelEventSource.ShowPII = true;
+            }
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookius";
+                options.DefaultChallengeScheme = "oidc";
+            }).AddCookie("Cookius")
+              .AddOpenIdConnect("oidc", options =>
+              {
+                  options.Authority = "https://localhost:5001";
+                  options.ClientId = "b23dcc22b84d4e5790b5aa76080e7fb0";
+                  options.ClientSecret = "72c109c367f44fc1b1abd7ff5f636875";
+                  options.ResponseType = "code";
+                  options.Scope.Add("profile");
+                  options.Scope.Add("openid");
+                  options.SaveTokens = true;
+                  options.GetClaimsFromUserInfoEndpoint = true;
+
+                  options.TokenValidationParameters = new TokenValidationParameters()
+                  {
+                      NameClaimType = "name",
+                      RoleClaimType = "role"
+                  };
+              });
+
+
+
             // Dbcontext config
             services.ConfigureProviderForContext<SkyContext>(DetectDatabase);
-                      
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = new PathString("/conta/entrar");
