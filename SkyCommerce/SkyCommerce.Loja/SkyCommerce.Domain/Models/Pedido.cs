@@ -8,7 +8,7 @@ namespace SkyCommerce.Models
     public class Pedido
     {
         public Pedido() { }
-        public Pedido(Frete frete, Endereco enderecoCobranca, Endereco enderecoEntrega, CartaoCredito cartaoCredito,
+        public Pedido(ViewObjects.Frete frete, Endereco enderecoCobranca, Endereco enderecoEntrega, CartaoCredito cartaoCredito,
             TipoPagamento tipoPagamento, Carrinho carrinho, string comentario)
         {
             var faker = new Faker();
@@ -40,7 +40,7 @@ namespace SkyCommerce.Models
         public decimal Desconto { get; set; }
         public decimal PercentualDesconto => Desconto / Total;
         public string RastreamentoFrete { get; set; }
-        public Frete Frete { get; set; }
+        public ViewObjects.Frete Frete { get; set; }
 
         public decimal TotalProdutos => Produtos.Sum(s => s.Valor * s.Quantidade);
 
@@ -65,7 +65,7 @@ namespace SkyCommerce.Models
                 .RuleFor(p => p.RastreamentoFrete, f => f.Random.AlphaNumeric(10).ToUpper())
                 .RuleFor(p => p.Produtos, f => SnapshotProduto.Obter(imagens).Generate(faker.Random.Int(1, 10)))
                 .RuleFor(p => p.Cupom, f => f.Lorem.Word())
-                .RuleFor(p => p.Frete, f => Frete.Obter().Generate())
+                .RuleFor(p => p.Frete, f => ViewObjects.Frete.Obter().Generate())
                 .RuleFor(p => p.Desconto, (f, pedido) => f.Finance.Amount(0, pedido.Total * 0.60m));
         }
 

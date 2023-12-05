@@ -10,7 +10,7 @@ namespace SkyCommerce.Data.Entities
         public string Cupom { get; set; }
         public decimal Desconto { get; set; }
         public decimal PercentualDesconto { get; set; }
-        public Frete Frete { get; set; }
+        public ViewObjects.Frete Frete { get; set; }
         public ICollection<ItemCarrinho> CarrinhoProdutos { get; set; }
 
         public void Atualizar(Models.Carrinho carrinho)

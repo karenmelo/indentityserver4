@@ -33,7 +33,7 @@ namespace SkyCommerce.Site
                 .AddRazorRuntimeCompilation();
 
             services.AddHttpClient();
-
+            services.AddHttpContextAccessor();
 
             //serve para o aspnetcore nao associar os schemas xml ao nome default das claims
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
@@ -45,9 +45,9 @@ namespace SkyCommerce.Site
 
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "Cookius";
+                options.DefaultScheme = "Cookies";
                 options.DefaultChallengeScheme = "oidc";
-            }).AddCookie("Cookius")
+            }).AddCookie("Cookies")
               .AddOpenIdConnect("oidc", options =>
               {
                   options.Authority = "https://localhost:5001";

@@ -27,7 +27,7 @@ namespace SkyCommerce.Site.Configure
 
 
             Log.Information("Aguarde, carregando base de dados");
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            //var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
             var carrinhoService = scope.ServiceProvider.GetRequiredService<ICarrinhoService>();
                               

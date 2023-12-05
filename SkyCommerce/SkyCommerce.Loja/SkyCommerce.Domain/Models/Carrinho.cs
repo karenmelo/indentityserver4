@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿
+using Bogus;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace SkyCommerce.Models
     {
         public string Usuario { get; set; }
         public List<ItemCarrinho> Items { get; set; }
-        public Frete Frete { get; set; }
+        public ViewObjects.Frete Frete { get; set; }
         public string Cupom { get; set; }
         public decimal PercentualDesconto { get; set; }
         public decimal Desconto { get; set; } = 0;
@@ -39,7 +40,7 @@ namespace SkyCommerce.Models
             return Items != null && Items.Any(a => a.NomeUnico.Equals(produto));
         }
 
-        public void SelecionarFrete(Frete frete)
+        public void SelecionarFrete(ViewObjects.Frete frete)
         {
             Frete = frete;
         }

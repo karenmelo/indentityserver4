@@ -17,7 +17,7 @@ namespace SkyCommerce.Data.Entities
         public DateTime DataPagamento { get; set; }
         public string IdentificadorUnico { get; set; }
         public ICollection<ProdutoVendido> Produtos { get; set; }
-        public Frete Frete { get; set; }
+        public ViewObjects.Frete Frete { get; set; }
         public string Cupom { get; set; }
         public decimal Desconto { get; set; }
         public string Comentarios { get; set; }

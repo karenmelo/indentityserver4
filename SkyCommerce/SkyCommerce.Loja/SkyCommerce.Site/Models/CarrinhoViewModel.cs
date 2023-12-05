@@ -1,5 +1,7 @@
 ﻿using SkyCommerce.Models;
+using SkyCommerce.ViewObjects;
 using System.Collections.Generic;
+using Frete = SkyCommerce.ViewObjects.Frete;
 
 namespace SkyCommerce.Site.Models
 {

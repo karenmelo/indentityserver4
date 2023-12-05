@@ -1,11 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using SkyCommerce.Site.Models;
-using System;
-using System.Threading.Tasks;
 
 namespace SkyCommerce.Site.Controllers
 {
@@ -13,8 +7,7 @@ namespace SkyCommerce.Site.Controllers
     public class AccountController : Controller
     {
         [HttpGet]
-        [Authorize]
-        [AllowAnonymous]
+        [Authorize]       
         [Route("entrar")]
         public IActionResult Login(string returnUrl = null)
         {

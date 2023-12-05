@@ -21,7 +21,7 @@ namespace SkyCommerce.Site.Models
         public Carrinho Carrinho { get; set; }
         public string Comentario { get; set; }
         public string Erro { get; set; }
-        public IEnumerable<Frete> OpcoesFrete { get; set; }
+        public IEnumerable<ViewObjects.Frete> OpcoesFrete { get; set; }
 
         public Pedido GerarPedido(Carrinho carrinho, IEnumerable<Endereco> enderecos)
         {
@@ -39,7 +39,7 @@ namespace SkyCommerce.Site.Models
 
             }
             if (Carrinho.TotalProdutos > 200)
-                carrinho.Frete = new Frete() { Modalidade = "Gratis", Descricao = "Gratuito acima de R$200", Valor = 0 };
+                carrinho.Frete = new ViewObjects.Frete() { Modalidade = "Gratis", Descricao = "Gratuito acima de R$200", Valor = 0 };
 
             return new Pedido(Carrinho.Frete, EnderecoCobranca, EnderecoEntrega, CartaoCredito, TipoPagamento, carrinho, Comentario);
         }

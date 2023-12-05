@@ -1,7 +1,12 @@
-﻿using SkyCommerce.Interfaces;
+﻿using Refit;
+using SkyCommerce.Extensions;
+using SkyCommerce.Interfaces;
 using SkyCommerce.Models;
+using SkyCommerce.ViewObjects;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Frete = SkyCommerce.ViewObjects.Frete;
 
 namespace SkyCommerce.Services
 {
@@ -12,6 +17,12 @@ namespace SkyCommerce.Services
         public FreteService(IProdutoStore produtoStore)
         {
             _produtoStore = produtoStore;
+        }
+
+        public Task<IEnumerable<DetalhesFrete>> ObterModalidades(GeoCoordinate geo, string token)
+        {
+            var freteApi = RestService.For<IFreteApi>("https://localhost:5007");
+            return freteApi.Modalidades($"Bearer {token}", PosicaoViewObject.FromGeoCoordinate(geo));
         }
 
         public IEnumerable<Frete> CalcularFrete(Embalagem embalagem, GeoCoordinate posicao)
@@ -50,22 +61,24 @@ namespace SkyCommerce.Services
 
         public async Task<IEnumerable<Frete>> CalcularCarrinho(Carrinho carrinho, GeoCoordinate posicao)
         {
-            var standard = new Frete("Standard", "Entrega em até 15 dias uteis", 0);
-            var fast = new Frete("Fast", "Entrega em até 7 dias uteis", 0);
-            var ultra = new Frete("Ultra", "Entrega em até 2 dias uteis", 0);
 
+            var freteApi = RestService.For<IFreteApi>("https://localhost:5007");
+            var fretes = (await freteApi.Modalidades(PosicaoViewObject.FromGeoCoordinate(posicao))).Select(Frete.FromViewModel).ToList();
             if (carrinho != null && posicao != null)
             {
                 foreach (var carrinhoItem in carrinho.Items)
                 {
                     var produto = await _produtoStore.ObterPorNome(carrinhoItem.NomeUnico);
-                    standard.AtualizarValor(CalcularStandard(produto.Embalagem, posicao));
-                    fast.AtualizarValor(CalcularFast(produto.Embalagem, posicao));
-                    ultra.AtualizarValor(CalcularUltra(produto.Embalagem, posicao));
+                    var opcoesDeFrete = await freteApi.Calcular(posicao.Latitude, posicao.Longitude, produto.Embalagem);
+                    foreach (var frete in fretes)
+                    {
+                        frete.AtualizarValor(opcoesDeFrete.Modalidade(frete.Modalidade));
+                    }
                 }
             }
 
-            return new List<Frete>() { standard, fast, ultra };
+            return fretes;
         }
+
     }
 }
